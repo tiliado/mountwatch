@@ -54,7 +54,10 @@ uninstall:
 	rm -v $(PREFIX)/bin/$(APPPATH)
 
 dist: clean
-	bzr revision-info > revision-info
-	tar -cvzf ../$(APPPATH)-$(APPVERSION).tar.gz -X dist-exclude ./
-	rm -f revision-info
+	bzr export ../$(APPPATH)-$(APPVERSION).tar
+	mkdir $(APPPATH)-$(APPVERSION)
+	bzr revision-info > $(APPPATH)-$(APPVERSION)/revision-info
+	tar -rvf ../$(APPPATH)-$(APPVERSION).tar $(APPPATH)-$(APPVERSION)
+	rm -rf $(APPPATH)-$(APPVERSION)
+	xz -zf ../$(APPPATH)-$(APPVERSION).tar
 

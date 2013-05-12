@@ -25,6 +25,7 @@
 public extern const string APPNAME;
 public extern const string APPPATH;
 public extern const string APPVERSION;
+public extern const string REVISION;
 
 namespace MountWatch
 {
@@ -50,6 +51,7 @@ public class App
 		monitor.mount_added.connect(on_mount_added);
 		monitor.mount_pre_unmount.connect(on_mount_pre_unmount);
 		message("%s %s is running...", APPNAME, APPVERSION);
+		message("Revision: %s", REVISION);
 		if (library.query_exists())
 			message("Library of tasks: %s", library.get_path());
 		else

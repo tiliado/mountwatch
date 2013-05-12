@@ -36,7 +36,8 @@ all: $(OUT)/$(APPPATH)
 
 $(OUT)/$(APPPATH): $(VALA_SRC)
 	$(VALAC) $(VALAFLAGS) -v -d $(OUT) --save-temps --pkg gio-2.0 -o $(APPPATH) $(VALA_SRC) \
-	-X '-DAPPNAME="$(APPNAME)"' -X '-DAPPPATH="$(APPPATH)"' -X '-DAPPVERSION="$(APPVERSION)"'
+	-X '-DAPPNAME="$(APPNAME)"' -X '-DAPPPATH="$(APPPATH)"' -X '-DAPPVERSION="$(APPVERSION)"' \
+	-X '-DREVISION="$(shell cat revision-info || bzr revision-info || echo unknown)"'
 
 clean:
 	rm -rf $(OUT)
@@ -53,5 +54,7 @@ uninstall:
 	rm -v $(PREFIX)/bin/$(APPPATH)
 
 dist: clean
+	bzr revision-info > revision-info
 	tar -cvzf ../$(APPPATH)-$(APPVERSION).tar.gz -X dist-exclude ./
+	rm -f revision-info
 

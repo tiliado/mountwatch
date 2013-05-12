@@ -1,0 +1,60 @@
+Removabled
+==========
+
+About
+-----
+
+Removabled is a service that monitors mounts (e.g. USB sticks or hard drives)
+and runs task on mount/unmount events.
+
+Installation
+------------
+
+1) Dependencies
+
+* valac >= 0.16
+* gcc
+* glib-2.0 >= 2.32
+* gio-2.0 >= 2.32
+* make
+
+2) Build
+
+Run as a regular user:
+
+    make
+
+3) Install
+
+Run as root:
+
+    make install
+
+or
+
+    make PREFIX=/usr install
+
+4) Uninstall
+
+Run as root:
+
+    make uninstall
+
+or
+
+    make PREFIX=/usr uninstall
+
+Usage
+-----
+
+Put tasks into ~/.config/removabled/tasks. Tasks must be executable files with filenames
+"{MOUNT_NAME}--{EVENT}{WHATEVER}", eg. "myexthdd--M01_mount_encfs.sh".
+
+{MOUNT_NAME} - usually a label of a partition
+{EVENT}      - "M" for mount event, "U" for unmount event
+{WHATEVER}   - short description of the script
+
+Tasks are executed in alphabetical order with a single argument - a full path of mount's
+root directory, e.g. "/media/myexthdd". 
+
+Run "removabled" as a regular user, use Ctrl-C to quit the app.

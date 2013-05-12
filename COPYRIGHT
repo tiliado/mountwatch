@@ -1,0 +1,23 @@
+COPYRIGHT AND LICENSE INFORMATION
+
+This file contains overall copyright and license information, see source code
+headers for details.
+
+Here follows a list of files and their copyright and license information.
+The last paragraph that matches a particular file applies to it. Asterisk (*)
+expands to any string including "/".
+
+Files:      *
+Copyright:  2013 Jiří Janoušek <janousek.jiri@gmail.com>
+License:    The BSD 2-Clause License
+Legal text: See file LICENSE
+
+Files:      examples/*
+Author:     2013 Jiří Janoušek <janousek.jiri@gmail.com>
+License:    To the extent possible under law, author has waived all
+            copyright and related or neighboring rights to this script.
+            http://creativecommons.org/publicdomain/zero/1.0/
+            
+            This script is distributed in the hope that it will be useful,
+            but WITHOUT ANY WARRANTY; without even the implied warranty
+            of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

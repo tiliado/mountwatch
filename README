@@ -1,11 +1,10 @@
-Removabled
-==========
+Mount Watch
+===========
 
 About
 -----
 
-Removabled is a service that monitors mounts (e.g. USB sticks or hard drives)
-and runs task on mount/unmount events.
+Mount Watch monitors mounts (e.g. USB sticks or hard drives) and runs task on mount/unmount events.
 
 Installation
 ------------
@@ -47,7 +46,7 @@ or
 Usage
 -----
 
-Put tasks into ~/.config/removabled/tasks. Tasks must be executable files with filenames
+Put tasks into ~/.config/mountwatch/tasks. Tasks must be executable files with filenames
 "{MOUNT_NAME}--{EVENT}{WHATEVER}", eg. "myexthdd--M01_mount_encfs.sh".
 
 {MOUNT_NAME} - usually a label of a partition
@@ -57,4 +56,4 @@ Put tasks into ~/.config/removabled/tasks. Tasks must be executable files with f
 Tasks are executed in alphabetical order with a single argument - a full path of mount's
 root directory, e.g. "/media/myexthdd". 
 
-Run "removabled" as a regular user, use Ctrl-C to quit the app.
+Run "mountwatch" as a regular user, use Ctrl-C to quit the app.

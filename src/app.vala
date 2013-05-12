@@ -1,8 +1,9 @@
 // Copyright 2013 Jiří Janoušek <janousek.jiri@gmail.com>
 public extern const string APPNAME;
+public extern const string APPPATH;
 public extern const string APPVERSION;
 
-namespace Removabled
+namespace MountWatch
 {
 public const string EVENT_MOUNT = "M";
 public const string EVENT_UNMOUNT = "U";
@@ -16,7 +17,7 @@ public class App
 	
 	public App()
 	{
-		library = File.new_for_path(Environment.get_user_config_dir()).get_child(APPNAME).get_child(TASKS_DIRECTORY);
+		library = File.new_for_path(Environment.get_user_config_dir()).get_child(APPPATH).get_child(TASKS_DIRECTORY);
 		monitor = VolumeMonitor.get();
 	}
 	

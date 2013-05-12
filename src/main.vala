@@ -1,6 +1,6 @@
 // Copyright 2013 Jiří Janoušek <janousek.jiri@gmail.com>
 
-namespace Removabled
+namespace MountWatch
 {
 
 int main(string[] args)

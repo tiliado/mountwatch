@@ -69,15 +69,18 @@ public class App
 	private void on_mount_added(Mount mount)
 	{
 		message("Mount: %s (%s) at %s", mount.get_name(), mount.get_uuid() ?? "null", mount.get_root().get_path());
-		var tasks = get_tasks(EVENT_MOUNT, mount.get_uuid() ?? mount.get_name());
-		run_tasks(tasks, mount.get_root().get_path());
+		var name = mount.get_uuid() ?? mount.get_name();
+		var tasks = get_tasks(EVENT_MOUNT, name);
+		run_tasks(tasks, mount.get_root().get_path(), name);
 	}
 	
 	private void on_mount_pre_unmount(Mount mount)
 	{
+		
 		message("Unmount: %s (%s) at %s", mount.get_name(), mount.get_uuid() ?? "null", mount.get_root().get_path());
-		var tasks = get_tasks(EVENT_UNMOUNT, mount.get_uuid() ?? mount.get_name());
-		run_tasks(tasks, mount.get_root().get_path());
+		var name = mount.get_uuid() ?? mount.get_name();
+		var tasks = get_tasks(EVENT_UNMOUNT, name);
+		run_tasks(tasks, mount.get_root().get_path(), name);
 	}
 	
 	private SList<string> get_tasks(string event, string id)
@@ -104,13 +107,13 @@ public class App
 		return tasks;
 	}
 	
-	private void run_tasks(SList<string> tasks, string root)
+	private void run_tasks(SList<string> tasks, string root, string id)
 	{
 		
 		foreach(var task in tasks)
 			try
 			{
-				run_task(task, root);
+				run_task(task, root, id);
 			}
 			catch (Error e)
 			{
@@ -118,15 +121,15 @@ public class App
 			}
 	}
 	
-	private void run_task(string task, string root) throws Error
+	private void run_task(string task, string root, string id) throws Error
 	{
-		stdout.printf("Run> %s %s\n", task, root);
+		stdout.printf("Run> %s %s %s\n", task, root, id);
 		int result = 0;
 		string cmd_out;
 		string cmd_err;
 		try
 		{
-			string[] args = {task, root};
+			string[] args = {task, root, id};
 			Process.spawn_sync(null, args, null,  SpawnFlags.SEARCH_PATH, null, out cmd_out, out cmd_err, out result);
 		}
 		catch(SpawnError e)
@@ -136,7 +139,7 @@ public class App
 		
 		if (result != 0)
 			throw new Error.TASK_FAILED("Task '%s' returned nonzero status: %d\nstdout: %s\nstderr: %s", task, result, cmd_out, cmd_err);
-		message("Finished> %s %s\nstdout: %s\nstderr: %s", task, root, cmd_out, cmd_err);
+		message("Finished> %s %s %s\nstdout: %s\nstderr: %s", task, root, id, cmd_out, cmd_err);
 	}
 }
 

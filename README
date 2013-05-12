@@ -53,7 +53,8 @@ Put tasks into ~/.config/mountwatch/tasks. Tasks must be executable files with f
 {EVENT}      - "M" for mount event, "U" for unmount event
 {WHATEVER}   - short description of the script
 
-Tasks are executed in alphabetical order with a single argument - a full path of mount's
-root directory, e.g. "/media/myexthdd". 
+Tasks are executed in alphabetical order with two arguments:
+- a full path of mount's root directory, e.g. "/media/myexthdd"
+- a mount name, usually a label of a partition, e.g. "myexthdd"
 
 Run "mountwatch" as a regular user, use Ctrl-C to quit the app.

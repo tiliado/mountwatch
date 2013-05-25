@@ -58,3 +58,8 @@ Tasks are executed in alphabetical order with two arguments:
 - a mount name, usually a label of a partition, e.g. "myexthdd"
 
 Run "mountwatch" as a regular user, use Ctrl-C to quit the app.
+
+Support
+-------
+
+Report bugs at janousek.jiri@gmail.com with subject "[Mount watch bug] ...".

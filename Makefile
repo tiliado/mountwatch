@@ -22,7 +22,7 @@
 
 APPNAME=Mount Watch
 APPPATH=mountwatch
-APPVERSION=0.0.1
+APPVERSION=0.01
 VALAC=valac
 SRC=src
 OUT=build

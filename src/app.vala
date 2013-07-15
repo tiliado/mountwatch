@@ -56,6 +56,7 @@ public class App
 			message("Library of tasks: %s", library.get_path());
 		else
 			warning("Library of tasks not found: %s", library.get_path());
+		process_current_mounts();
 		loop.run();
 	}
 	
@@ -64,6 +65,17 @@ public class App
 		monitor.mount_added.disconnect(on_mount_added);
 		monitor.mount_pre_unmount.disconnect(on_mount_pre_unmount);
 		loop.quit();
+	}
+	
+	private void process_current_mounts()
+	{
+		foreach (var mount in monitor.get_mounts())
+		{
+			message("Mount found: %s (%s) at %s", mount.get_name(), mount.get_uuid() ?? "null", mount.get_root().get_path());
+			var name = mount.get_uuid() ?? mount.get_name();
+			var tasks = get_tasks(EVENT_MOUNT, name);
+			run_tasks(tasks, mount.get_root().get_path(), name);
+		}
 	}
 	
 	private void on_mount_added(Mount mount)
@@ -76,7 +88,6 @@ public class App
 	
 	private void on_mount_pre_unmount(Mount mount)
 	{
-		
 		message("Unmount: %s (%s) at %s", mount.get_name(), mount.get_uuid() ?? "null", mount.get_root().get_path());
 		var name = mount.get_uuid() ?? mount.get_name();
 		var tasks = get_tasks(EVENT_UNMOUNT, name);

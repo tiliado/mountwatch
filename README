@@ -11,11 +11,12 @@ Installation
 
 1) Dependencies
 
-* valac >= 0.16
-* gcc
-* glib-2.0 >= 2.32
-* gio-2.0 >= 2.32
-* python 2
+* valac >= 0.16         https://wiki.gnome.org/Projects/Vala
+* gcc                   http://gcc.gnu.org/
+* glib-2.0 >= 2.32      http://www.gtk.org/
+* gio-2.0 >= 2.32       http://www.gtk.org/
+* dioriteglib           https://launchpad.net/diorite
+* python 2              http://python.org/
 
 2) Configure
 

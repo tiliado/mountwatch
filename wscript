@@ -129,17 +129,19 @@ def configure(ctx):
 	# Check dependencies
 	ctx.check_dep('glib-2.0', 'GLIB', '2.32')
 	ctx.check_dep('gio-2.0', 'GIO', '2.32')
+	ctx.check_dep('dioriteglib', 'DIORITEGLIB', '0.0.1')
 	
 	ctx.define("APPNAME", DISPLAY_NAME)
 	ctx.define("APPPATH", APPNAME)
+	ctx.define("G_LOG_DOMAIN", APPNAME)
 	ctx.define("APPVERSION", VERSION)
 
 def build(ctx):
 	revision_info(ctx)
 	#~ print ctx.env
 	
-	packages = 'glib-2.0 gio-2.0'
-	uselib = 'GLIB GIO'
+	packages = 'glib-2.0 gio-2.0 dioriteglib'
+	uselib = 'GLIB GIO DIORITEGLIB'
 	vala_defines = ctx.env.VALA_DEFINES
 	
 	ctx.program(

@@ -39,17 +39,10 @@ public class App
 	private File[] libraries;
 	private MainLoop loop;
 	
-	private static bool opt_system = false;
-	public const OptionEntry[] options =
-	{
-		{ "system", 0, 0, OptionArg.NONE, ref opt_system, "Run task from system tasks library", null },
-		{ null }
-	};
-	
-	public App()
+	public App(bool system)
 	{
 		libraries = {};
-		if (App.opt_system)
+		if (system)
 		{
 			var dirs = Environment.get_system_config_dirs();
 			if (dirs.length > 0)
@@ -76,13 +69,19 @@ public class App
 		monitor.mount_pre_unmount.connect(on_mount_pre_unmount);
 		message("%s %s is running...", APPNAME, APPVERSION);
 		message("Revision: %s", REVISION);
+		bool found = false;
 		foreach (var library in libraries)
 		{
 			if (library.query_exists())
+			{
+				found = true;
 				message("Library of tasks: %s", library.get_path());
-			else
-				warning("Library of tasks not found: %s", library.get_path());
+			}
 		}
+		
+		if (!found)
+			warning("No library of tasks has been found.");
+		
 		process_current_mounts();
 		loop.run();
 	}
@@ -143,7 +142,7 @@ public class App
 			}
 			catch (GLib.Error e)
 			{
-				stderr.printf ("Failed to enumerate tasks in directory '%s': %s\n", library.get_path(), e.message);
+				warning("Failed to enumerate tasks in directory '%s': %s", library.get_path(), e.message);
 			}
 		}
 		
@@ -167,7 +166,7 @@ public class App
 	
 	private void run_task(string task, string root, string id) throws Error
 	{
-		stdout.printf("Run> %s %s %s\n", task, root, id);
+		debug("Running task %s %s %s", task, root, id);
 		int result = 0;
 		string cmd_out;
 		string cmd_err;
@@ -183,7 +182,7 @@ public class App
 		
 		if (result != 0)
 			throw new Error.TASK_FAILED("Task '%s' returned nonzero status: %d\nstdout: %s\nstderr: %s", task, result, cmd_out, cmd_err);
-		message("Finished> %s %s %s\nstdout: %s\nstderr: %s", task, root, id, cmd_out, cmd_err);
+		debug("Finished task %s %s %s\nstdout: %s\nstderr: %s", task, root, id, cmd_out, cmd_err);
 	}
 }
 

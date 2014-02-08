@@ -24,6 +24,19 @@
 
 namespace MountWatch
 {
+	
+	private static bool opt_system = false;
+	private static bool opt_verbose = false;
+	private static bool opt_debug = false;
+	private static bool opt_version = false;
+	private const OptionEntry[] options =
+	{
+		{ "system", 0, 0, OptionArg.NONE, ref opt_system, "Run task from system tasks library", null },
+		{ "verbose", 'v', 0, OptionArg.NONE, ref opt_verbose, "Print informational messages", null },
+		{ "debug", 'd', 0, OptionArg.NONE, ref opt_debug, "Print debugging messages", null },
+		{ "version", 'V', 0, OptionArg.NONE, ref opt_version, "Print version and exit", null },
+		{ null }
+	};
 
 int main(string[] args)
 {
@@ -31,7 +44,7 @@ int main(string[] args)
 	{
 		var opt_context = new OptionContext("- Diorite Test Generator");
 		opt_context.set_help_enabled(true);
-		opt_context.add_main_entries(App.options, null);
+		opt_context.add_main_entries(options, null);
 		opt_context.parse(ref args);
 	}
 	catch (OptionError e)
@@ -40,7 +53,16 @@ int main(string[] args)
 		return 1;
 	}
 	
-	var app = new App();
+	if (opt_version)
+	{
+		stdout.printf("%s %s\n", APPNAME, APPVERSION);
+		stdout.printf("Revision: %s\n", REVISION);
+		return 0;
+	}
+	
+	Diorite.Logger.init(stderr, opt_debug ? GLib.LogLevelFlags.LEVEL_DEBUG : (opt_verbose ? GLib.LogLevelFlags.LEVEL_INFO: GLib.LogLevelFlags.LEVEL_WARNING));
+	
+	var app = new App(opt_system);
 	app.run();
 	return 0;
 }

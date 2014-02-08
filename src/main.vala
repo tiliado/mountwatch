@@ -29,12 +29,15 @@ namespace MountWatch
 	private static bool opt_verbose = false;
 	private static bool opt_debug = false;
 	private static bool opt_version = false;
+	private static string? opt_log_file = null;
+	
 	private const OptionEntry[] options =
 	{
 		{ "system", 0, 0, OptionArg.NONE, ref opt_system, "Run task from system tasks library", null },
 		{ "verbose", 'v', 0, OptionArg.NONE, ref opt_verbose, "Print informational messages", null },
 		{ "debug", 'd', 0, OptionArg.NONE, ref opt_debug, "Print debugging messages", null },
 		{ "version", 'V', 0, OptionArg.NONE, ref opt_version, "Print version and exit", null },
+		{ "log-file", 'L', 0, OptionArg.FILENAME, ref opt_log_file, "Log to file", "FILE" },
 		{ null }
 	};
 
@@ -49,7 +52,7 @@ int main(string[] args)
 	}
 	catch (OptionError e)
 	{
-		stdout.printf("%s\n", e.message);
+		stderr.printf("%s\n", e.message);
 		return 1;
 	}
 	
@@ -60,7 +63,20 @@ int main(string[] args)
 		return 0;
 	}
 	
-	Diorite.Logger.init(stderr, opt_debug ? GLib.LogLevelFlags.LEVEL_DEBUG : (opt_verbose ? GLib.LogLevelFlags.LEVEL_INFO: GLib.LogLevelFlags.LEVEL_WARNING));
+	FileStream? log = null;
+	
+	if (opt_log_file != null)
+	{
+		log = FileStream.open(opt_log_file, "w");
+		if (log == null)
+		{
+			stderr.printf("Cannot open log file '%s' for writting.\n", opt_log_file);
+			return 1;
+		}
+	}
+
+	
+	Diorite.Logger.init(log != null ? log : stderr, opt_debug ? GLib.LogLevelFlags.LEVEL_DEBUG : (opt_verbose ? GLib.LogLevelFlags.LEVEL_INFO: GLib.LogLevelFlags.LEVEL_WARNING));
 	
 	var app = new App(opt_system);
 	app.run();

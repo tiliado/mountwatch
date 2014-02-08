@@ -136,7 +136,7 @@ def configure(ctx):
 
 def build(ctx):
 	revision_info(ctx)
-	print ctx.env
+	#~ print ctx.env
 	
 	packages = 'glib-2.0 gio-2.0'
 	uselib = 'GLIB GIO'

@@ -15,33 +15,35 @@ Installation
 * gcc
 * glib-2.0 >= 2.32
 * gio-2.0 >= 2.32
-* make
+* python 2
+
+2) Configure
+
+Run as a regular user:
+
+    ./waf configure
+
+or
+
+    ./waf configure --prefix=/usr
 
 2) Build
 
 Run as a regular user:
 
-    make
+    ./waf build
 
 3) Install
 
 Run as root:
 
-    make install
-
-or
-
-    make PREFIX=/usr install
+    ./waf install
 
 4) Uninstall
 
 Run as root:
 
-    make uninstall
-
-or
-
-    make PREFIX=/usr uninstall
+    ./waf uninstall
 
 Usage
 -----
@@ -62,4 +64,5 @@ Run "mountwatch" as a regular user, use Ctrl-C to quit the app.
 Support
 -------
 
-Report bugs at janousek.jiri@gmail.com with subject "[Mount watch bug] ...".
+- Ask questions at https://answers.launchpad.net/mountwatch
+- Report bugs at https://bugs.launchpad.net/mountwatch

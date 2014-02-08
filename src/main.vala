@@ -27,6 +27,19 @@ namespace MountWatch
 
 int main(string[] args)
 {
+	try
+	{
+		var opt_context = new OptionContext("- Diorite Test Generator");
+		opt_context.set_help_enabled(true);
+		opt_context.add_main_entries(App.options, null);
+		opt_context.parse(ref args);
+	}
+	catch (OptionError e)
+	{
+		stdout.printf("%s\n", e.message);
+		return 1;
+	}
+	
 	var app = new App();
 	app.run();
 	return 0;

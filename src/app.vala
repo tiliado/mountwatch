@@ -36,12 +36,36 @@ const string TASKS_DIRECTORY = "tasks";
 public class App
 {
 	private VolumeMonitor monitor;
-	private File library;
+	private File[] libraries;
 	private MainLoop loop;
+	
+	private static bool opt_system = false;
+	public const OptionEntry[] options =
+	{
+		{ "system", 0, 0, OptionArg.NONE, ref opt_system, "Run task from system tasks library", null },
+		{ null }
+	};
 	
 	public App()
 	{
-		library = File.new_for_path(Environment.get_user_config_dir()).get_child(APPPATH).get_child(TASKS_DIRECTORY);
+		libraries = {};
+		if (App.opt_system)
+		{
+			var dirs = Environment.get_system_config_dirs();
+			if (dirs.length > 0)
+			{
+				foreach (var dir in dirs)
+					libraries += File.new_for_path(dir).get_child(APPPATH).get_child(TASKS_DIRECTORY); 
+			}
+			else
+			{
+				libraries += File.new_for_path("/etc/xdg").get_child(APPPATH).get_child(TASKS_DIRECTORY); 
+			}
+		}
+		else
+		{
+			libraries += File.new_for_path(Environment.get_user_config_dir()).get_child(APPPATH).get_child(TASKS_DIRECTORY);
+		}
 		monitor = VolumeMonitor.get();
 	}
 	
@@ -52,10 +76,13 @@ public class App
 		monitor.mount_pre_unmount.connect(on_mount_pre_unmount);
 		message("%s %s is running...", APPNAME, APPVERSION);
 		message("Revision: %s", REVISION);
-		if (library.query_exists())
-			message("Library of tasks: %s", library.get_path());
-		else
-			warning("Library of tasks not found: %s", library.get_path());
+		foreach (var library in libraries)
+		{
+			if (library.query_exists())
+				message("Library of tasks: %s", library.get_path());
+			else
+				warning("Library of tasks not found: %s", library.get_path());
+		}
 		process_current_mounts();
 		loop.run();
 	}
@@ -98,20 +125,26 @@ public class App
 	{
 		SList<string> tasks = new SList<string>();
 		var prefix = id + "--" + event;
-		try
+		foreach (var library in libraries)
 		{
-			var enumerator = library.enumerate_children(FileAttribute.STANDARD_NAME, 0);
-			FileInfo file_info;
-			while ((file_info = enumerator.next_file()) != null)
+			if (!library.query_exists())
+				continue;
+			
+			try
 			{
-				var name = file_info.get_name();
-				if (name.has_prefix(prefix))
-					tasks.prepend(library.get_child(name).get_path());
+				var enumerator = library.enumerate_children(FileAttribute.STANDARD_NAME, 0);
+				FileInfo file_info;
+				while ((file_info = enumerator.next_file()) != null)
+				{
+					var name = file_info.get_name();
+					if (name.has_prefix(prefix))
+						tasks.prepend(library.get_child(name).get_path());
+				}
 			}
-		}
-		catch (GLib.Error e)
-		{
-			stderr.printf ("Error: %s\n", e.message);
+			catch (GLib.Error e)
+			{
+				stderr.printf ("Failed to enumerate tasks in directory '%s': %s\n", library.get_path(), e.message);
+			}
 		}
 		
 		tasks.sort(GLib.strcmp);

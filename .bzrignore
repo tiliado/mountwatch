@@ -1,2 +1,4 @@
 build
 revision-info
+.waf*
+.lock*

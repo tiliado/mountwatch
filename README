@@ -1,6 +1,8 @@
 Mount Watch
 ===========
 
+Home page: https://github.com/tiliado/mountwatch
+
 About
 -----
 
@@ -65,5 +67,4 @@ Run "mountwatch" as a regular user, use Ctrl-C to quit the app.
 Support
 -------
 
-- Ask questions at https://answers.launchpad.net/mountwatch
-- Report bugs at https://bugs.launchpad.net/mountwatch
+Report bugs at https://github.com/tiliado/mountwatch/issues

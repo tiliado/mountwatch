@@ -80,7 +80,11 @@ public class App
 		}
 		
 		if (!found)
-			warning("No library of tasks has been found.");
+		{
+			warning("No library of tasks has been found");
+			foreach (var library in libraries)
+				message("Library path: %s", library.get_path());
+		}
 		
 		process_current_mounts();
 		loop.run();
